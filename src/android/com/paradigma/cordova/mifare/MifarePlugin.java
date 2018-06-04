@@ -73,7 +73,7 @@ public class MifarePlugin extends CordovaPlugin {
                 PluginResult result = new PluginResult(PluginResult.Status.OK);
                 callbackContext.sendPluginResult(result);
             }else{
-                resultMessage = new JSONObject("{'code': 3, 'message': 'Mifare ReadUID was not initialized' }");
+                JSONObject resultMessage = new JSONObject("{'code': 3, 'message': 'Mifare ReadUID was not initialized' }");
                 PluginResult result = new PluginResult(PluginResult.Status.ERROR, resultMessage);
                 callbackContext.sendPluginResult(result);
             }
