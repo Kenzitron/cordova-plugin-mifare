@@ -17,7 +17,7 @@ public class MifarePlugin extends CordovaPlugin {
     private static final String TAG = "MifarePlugin";
     private static final Integer TIMEOUT_SECONDS_DEFAULT = 10;
     private static final String DEVICE = "/dev/ttyS3"; // UART serial port
-
+    private ExecutorService readUIDExecutor = null;
     
     @Override
     public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
@@ -27,7 +27,7 @@ public class MifarePlugin extends CordovaPlugin {
         if (action.equals("readUID")) {
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
-                    ExecutorService readUIDExecutor = Executors.newSingleThreadExecutor();
+                    readUIDExecutor = Executors.newSingleThreadExecutor();
                     Future<String> future = readUIDExecutor.submit(new Callable() {
                         
                         public String call() throws Exception {
@@ -67,6 +67,19 @@ public class MifarePlugin extends CordovaPlugin {
                 }
             });
             return true;
+        } else if (action.equals("closeReadUID")) {
+            if (readUIDExecutor != null) {
+                readUIDExecutor.shutdownNow();
+                PluginResult result = new PluginResult(PluginResult.Status.OK);
+                callbackContext.sendPluginResult(result);
+            }else{
+                resultMessage = new JSONObject("{'code': 3, 'message': 'Mifare ReadUID was not initialized' }");
+                PluginResult result = new PluginResult(PluginResult.Status.ERROR, resultMessage);
+                callbackContext.sendPluginResult(result);
+            }
+
+            return true;
+
         } else {
             
             return false;

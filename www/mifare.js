@@ -9,7 +9,16 @@ var mifare ={
             "readUID", 
             [args]
         );
-    }
+    },
+     closeReadUID: function(onSuccess, onError, args){
+         cordova.exec(
+             onSuccess,
+             onError,
+             "MifarePlugin",
+             "closeReadUID",
+             [args]
+         );
+     },
 }
 
 window.mifare=mifare;

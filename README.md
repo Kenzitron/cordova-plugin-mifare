@@ -29,6 +29,11 @@ In your Cordova Project you can use it as follows:
 
 You can configure your timeout (in seconds) using arguments as before. By default a 10 seconds timeout is configured. 
 
+### Actualización
+```bash
+$ cordova plugin remove cordova-plugin-mifare
+```
+
 ### Error results
 In case an error ocurred a JSON result will be returned with an error code and an error message.
 
@@ -44,3 +49,4 @@ Example:
 Error list:
 - 1: timeout error. 
 - 2: generic error.
+- 3: Mifare read was not thrown.
