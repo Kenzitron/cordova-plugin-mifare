@@ -18,7 +18,7 @@ var mifare ={
              "closeReadUID",
              [args]
          );
-     },
+     }
 }
 
 window.mifare=mifare;
