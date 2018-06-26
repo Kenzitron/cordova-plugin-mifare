@@ -21,10 +21,11 @@ public class MifarePlugin extends CordovaPlugin {
 
     @Override
     public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
-        // Configure timeout
-        final Integer timeout = args.length() != 0 ? args.getJSONObject(0).getInt("timeout") : TIMEOUT_SECONDS_DEFAULT;
-
         if (action.equals("readUID")) {
+
+            // Configure timeout
+            final Integer timeout = args.length() != 0 ? args.getJSONObject(0).getInt("timeout") : TIMEOUT_SECONDS_DEFAULT;
+
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
                     ExecutorService readUIDExecutor = Executors.newSingleThreadExecutor();
@@ -65,12 +66,13 @@ public class MifarePlugin extends CordovaPlugin {
                         }
                     } finally {
                         readUIDExecutor.shutdownNow();
+                        future = null;
                     }
                 }
             });
             return true;
         } else if (action.equals("closeReadUID")) {
-            if (future != null) {
+            if (future != null && !future.isDone() && !future.isCancelled()) {
                 future.cancel(true);
                 PluginResult result = new PluginResult(PluginResult.Status.OK);
                 callbackContext.sendPluginResult(result);
